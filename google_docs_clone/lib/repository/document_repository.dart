@@ -105,4 +105,42 @@ class DocumentRepository {
 
     return errorModel;
   }
+
+  Future<ErrorModel> deleteDocument(String token, String docId) async{
+    ErrorModel errorModel = ErrorModel(
+      message: "Some unexpected error occured",
+      data: null,
+    );
+
+    try {
+      var response = await _client.delete(
+        Uri.parse("$host/doc/$docId"),
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8",
+          "x-auth-token": token,
+        },
+      );
+
+      switch (response.statusCode) {
+        case 200:
+          errorModel = ErrorModel(
+            message: null,
+            data: null,
+          );
+          break;
+        default:
+          errorModel = ErrorModel(
+            message: response.body,
+            data: null,
+          );
+          break;
+      }
+    } catch (e) {
+      errorModel = ErrorModel(message: "$this, $e", data: null);
+      "$this, $e".logError();
+      Fluttertoast.showToast(msg: "$this $e");
+    }
+
+    return errorModel;
+  } 
 }

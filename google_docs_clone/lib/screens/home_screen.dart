@@ -71,15 +71,21 @@ class HomeScreen extends ConsumerWidget {
                 DocumentModel document = snapshot.data!.data[index];
                 return Card(
                   child: ListTile(
-                      title: Text(document.title),
-                      onTap: () {
-                        Routemaster.of(context)
-                            .push("/document/${document.id}");
+                    title: Text(document.title),
+                    onTap: () {
+                      Routemaster.of(context).push("/document/${document.id}");
+                    },
+                    trailing: IconButton(
+                      onPressed: () async {
+                        await ref
+                            .read(documentRepositoryProvider)
+                            .deleteDocument(
+                                ref.read(userProvider)!.token, document.id);
+                        ref.refresh(documentRepositoryProvider);
                       },
-                      trailing: IconButton(
-                        onPressed: () async {},
-                        icon: const Icon(Icons.delete),
-                      )),
+                      icon: const Icon(Icons.delete),
+                    ),
+                  ),
                 );
               },
             );
