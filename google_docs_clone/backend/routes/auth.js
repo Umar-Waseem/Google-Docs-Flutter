@@ -33,7 +33,7 @@ authRouter.post('/signup', async (req, res) => {
 authRouter.get('/get-data', auth, async (req, res) => {
     try {
         const user = await User.findById(req.user);
-        res.status(200).json({ user , token: req.token });
+        res.status(200).json({ user, token: req.token });
     } catch (err) {
         console.log(err);
         res.status(500).json({ error: err.message });

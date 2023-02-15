@@ -28,7 +28,9 @@ class LoginScreen extends ConsumerWidget {
     return Scaffold(
       body: Center(
         child: ElevatedButton.icon(
-            onPressed: () => signInWithGoogle(ref, context),
+            onPressed: () {
+              signInWithGoogle(ref, context);
+            },
             icon: Image.asset(
               "assets/images/google-logo.png",
               height: 22.0,

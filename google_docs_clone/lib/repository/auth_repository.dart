@@ -89,7 +89,7 @@ class AuthRepository {
       }
     } catch (e) {
       e.toString().logError();
-      Fluttertoast.showToast(msg: e.toString());
+      Fluttertoast.showToast(msg: "$this: $e", timeInSecForIosWeb: 6);
     }
     return errorModel;
   }
@@ -129,6 +129,7 @@ class AuthRepository {
         message: e.toString(),
         data: null,
       );
+      Fluttertoast.showToast(msg: "$this: $e", timeInSecForIosWeb: 6);
     }
     return error;
   }

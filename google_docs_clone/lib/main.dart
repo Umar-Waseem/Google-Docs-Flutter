@@ -36,7 +36,7 @@ class _MyAppState extends ConsumerState<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    final user = ref.watch(userProvider);
+    ref.watch(userProvider);
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'Google Docs',
