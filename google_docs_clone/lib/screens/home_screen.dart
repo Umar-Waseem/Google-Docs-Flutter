@@ -34,6 +34,11 @@ class HomeScreen extends ConsumerWidget {
     }
   }
 
+  void navigateToDocument(BuildContext context, String id) {
+    final navigator = Routemaster.of(context);
+    navigator.push("/document/$id");
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
@@ -72,9 +77,7 @@ class HomeScreen extends ConsumerWidget {
                 return Card(
                   child: ListTile(
                     title: Text(document.title),
-                    onTap: () {
-                      Routemaster.of(context).push("/document/${document.id}");
-                    },
+                    onTap: () => navigateToDocument(context, document.id),
                     trailing: IconButton(
                       onPressed: () async {
                         await ref

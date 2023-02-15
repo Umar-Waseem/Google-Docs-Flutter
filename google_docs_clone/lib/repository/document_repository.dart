@@ -106,7 +106,7 @@ class DocumentRepository {
     return errorModel;
   }
 
-  Future<ErrorModel> deleteDocument(String token, String docId) async{
+  Future<ErrorModel> deleteDocument(String token, String docId) async {
     ErrorModel errorModel = ErrorModel(
       message: "Some unexpected error occured",
       data: null,
@@ -142,5 +142,85 @@ class DocumentRepository {
     }
 
     return errorModel;
-  } 
+  }
+
+  Future<ErrorModel> updateDocumentTitle({
+    required String token,
+    required String docId,
+    required String title,
+  }) async {
+    ErrorModel errorModel = ErrorModel(
+      message: "Some unexpected error occured",
+      data: null,
+    );
+
+    try {
+      var response = await _client.put(
+        Uri.parse("$host/doc/title"),
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8",
+          "x-auth-token": token,
+        },
+        body: jsonEncode({
+          "title": title,
+          "id": docId,
+        }),
+      );
+
+      switch (response.statusCode) {
+        case 200:
+          errorModel = ErrorModel(
+            message: null,
+            data: null,
+          );
+          break;
+        default:
+          errorModel = ErrorModel(
+            message: response.body,
+            data: null,
+          );
+          break;
+      }
+    } catch (e) {
+      errorModel = ErrorModel(message: "$this, $e", data: null);
+      "$this, $e".logError();
+      Fluttertoast.showToast(msg: "$this $e");
+    }
+
+    return errorModel;
+  }
+
+  Future<ErrorModel> getDocumentById(String token, String id) async {
+    ErrorModel errorModel = ErrorModel(
+      message: "Some unexpected error occured",
+      data: null,
+    );
+
+    try {
+      var response = await _client.get(
+        Uri.parse("$host/doc/$id"),
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8",
+          "x-auth-token": token,
+        },
+      );
+
+      switch (response.statusCode) {
+        case 200:
+          errorModel = ErrorModel(
+            message: null,
+            data: DocumentModel.fromJson(response.body),
+          );
+          break;
+        default:
+          throw "This document does not exist";
+      }
+    } catch (e) {
+      errorModel = ErrorModel(message: "$this, $e", data: null);
+      "$this, $e".logError();
+      Fluttertoast.showToast(msg: "$this $e");
+    }
+
+    return errorModel;
+  }
 }
