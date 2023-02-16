@@ -11,6 +11,7 @@ import 'package:routemaster/routemaster.dart';
 import '../models/document_model.dart';
 import '../repository/auth_repository.dart';
 import '../repository/document_repository.dart';
+import '../repository/socket_repository.dart';
 
 class DocumentScreen extends ConsumerStatefulWidget {
   final String id;
@@ -24,12 +25,14 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
       TextEditingController(text: "Untitled Document");
 
   quill.QuillController? controller = quill.QuillController.basic();
+  SocketRepository socketRepository = SocketRepository();
 
   ErrorModel? errorModel;
 
   @override
   void initState() {
     super.initState();
+    socketRepository.joinDocumentRoom(widget.id);
     fetchDocumentData();
   }
 
