@@ -4,6 +4,7 @@ const cors = require('cors');
 const http = require('http');
 const authRouter = require('./routes/auth');
 const documentRouter = require('./routes/document');
+const Document = require('./models/document_model');
 
 
 const app = express();
@@ -20,7 +21,9 @@ const user = "umar-terminator";
 const pass = "umar1234";
 const DB = `mongodb+srv://${user}:${pass}@docsclonecluster.rqhlxea.mongodb.net/?retryWrites=true&w=majority`;
 
-
+app.get('/', (req, res) => {
+    res.send('You real slick boi, you made it to the backend, but there is nothing here 🥸');
+})
 
 mongoose
     .connect(DB)
@@ -36,7 +39,24 @@ io.on('connection', (socket) => {
         socket.join(documentId);
         console.log('Joined Room', documentId);
     });
+    socket.on("typing", (data) => {
+        socket.broadcast.to(data.room).emit("changes", data);
+        console.log("Typing")
+    });
+
+    socket.on("save", (data) => {
+        saveData(data);
+        console.log("Saved")
+    });
+
+
 });
+
+const saveData = async (data) => {
+    let document = await Document.findById(data.room);
+    document.content = data.delta;
+    document = await document.save();
+};
 
 const PORT = 3001 || process.env.PORT;
 server.listen(PORT, "0.0.0.0", () => {
