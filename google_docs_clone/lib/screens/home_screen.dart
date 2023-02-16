@@ -25,7 +25,8 @@ class HomeScreen extends ConsumerWidget {
         await ref.read(documentRepositoryProvider).createDocument(token);
 
     if (errorModel.data != null) {
-      navigator.push("/document/${errorModel.data.id}");
+      // navigator.push("/document/${errorModel.data.id}");
+      ref.refresh(documentRepositoryProvider);
     } else {
       Fluttertoast.showToast(
         msg: "$this ${errorModel.message!}",

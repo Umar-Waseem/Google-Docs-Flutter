@@ -38,8 +38,8 @@ documentRouter.delete("/doc/:id", auth, async (req, res) => {
 
 documentRouter.post("/doc/title", auth, async (req, res) => {
     try {
-        const { id, title } = req.body;
-        const document = await Document.findByIdAndUpdate(id, { title: title });
+        const { title, id } = req.body;
+        const document = await Document.findByIdAndUpdate(id, { title });
 
         res.json(document);
     } catch (error) {
@@ -49,7 +49,7 @@ documentRouter.post("/doc/title", auth, async (req, res) => {
 
 documentRouter.get("/doc/:id", auth, async (req, res) => {
     try {
-        const doc = await Document.findById({ uid: req.params.id });
+        const doc = await Document.findById(req.params.id);
 
         res.json(doc);
     } catch (error) {
